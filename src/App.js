@@ -1,12 +1,41 @@
-import logo from './logo.svg';
+import React from 'react';
+import axios from 'axios';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-     <h1>Hello World</h1>
-    </div>
-  );
+
+class App extends React.Component {
+    state = { advice: '' };
+
+    componentDidMount() {
+        this.fetchAdvice();
+    }
+
+    fetchAdvice = () => {
+        axios.get('https://api.adviceslip.com/advice')
+            .then((response) => {
+                const { advice } = response.data.slip;
+                console.log(response.data.slip.advice);
+
+                this.setState({ advice });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    render() {
+        const { advice } = this.state;
+
+        return (
+            <div className="App">
+               <div className="card">
+                   <h1 className="heading">{advice}</h1>
+                </div> 
+            </div>
+
+        );
+    }
 }
 
 export default App;
